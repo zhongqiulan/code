@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p v-html="msg"></p>
+        <br>
+        <!-- <button v-on:click="changeContent('宝宝来了哦')">点击改变内容</button>
+        <br>
+        <br>
+        <input type="text" v-on:keyup="getContent">
+        <br> -->
+        <input type="text" v-on:keyup.13="getContent">
+        <br>
+        <button @click="changeContent1()">点击改变内容</button>
+
+
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                msg: '我还是个<strong>宝宝</strong>'
+            },//model
+            methods: {
+                changeContent: function (name) {
+                    console.log(name + '...');
+                },
+                getContent: function (e) {
+                    console.log(e);
+                },
+                changeContent1: function () {
+                    this.msg = "你的小宝宝来了";
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

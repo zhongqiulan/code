@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+
+<script>
+    /**
+    function add(x,y){
+        return x + y
+    }
+    **/
+
+    /**
+    const add = (x) => {
+        return x + 2
+    }
+    **/
+
+    /**
+    参数只有唯一一个的时候，才可以按照下面的来写，其它情况都不可以
+    const add = x => {
+        return x + 2
+    }
+    **/
+
+    /**
+        当我们的方法体中，只有一句话的时候，可以省略 `{}`，如果方法体中有return关键字，必须连同return 一起省略，但是它内部会自动判断要不要返回
+    */
+    // const add = x => x + 2
+    
+
+    // console.log(add(9))
+
+    const person = {
+        name:"坚强",
+        age:30,
+        // say:function(){
+        //     console.log(this)
+        // }
+        
+        //只是上面的简写
+        // say(){
+        //     console.log(this)
+        // }
+
+        say:()=>console.log(this)
+    }
+
+    person.say()
+</script>
+</html>

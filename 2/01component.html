@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        
+    </div>
+    <script>
+        // 1.定义组件
+        const loginComponent = Vue.extend({
+            template: '<div>用户名：<input type="text"v-model=""><br> 密 码： <input type="password"><br><button>登录</button></div>',
+            data() {
+                return {
+                    username: '',
+                    password: ''
+                }
+            },
+            methods: {
+                login() {
+
+                }
+            }
+        })
+        // 2.注册组件
+        Vue.component('login', loginComponent)
+        new Vue({
+            el: '#app'
+        })
+    </script>
+</body>
+
+</html>

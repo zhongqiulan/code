@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.js"></script>
+    <style>
+        #app {
+            width: 600px;
+            margin: 10px auto;
+        }
+
+        .tb {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .tb th {
+            background-color: #0094ff;
+            color: white;
+        }
+
+        .tb td,
+        .tb th {
+            padding: 5px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        .add {
+            padding: 5px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+
+
+        .delconfirm {
+            transition: all 0.5s;
+            background-color: white;
+            width: 250px;
+            border: 1px solid black;
+            height: 120px;
+            position: absolute;
+            left: 45%;
+            top: 45%;
+        }
+
+        .delconfirm li {
+            list-style: none;
+            padding: 5px;
+        }
+
+        .cancel {
+            margin-left: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <brand-manager></brand-manager>
+    </div>
+
+    <!-- 组件的template -->
+    <template id="templateId">
+        <div>
+            <div class="add">
+                编号:
+                <input v-model="id" disabled type="text"> 品牌名称:
+                <input v-model="name" @keyup.enter="add" type="text">
+                <input type="button" @click="add" value="添加">
+            </div>
+
+            <div class="add">
+                品牌名称:
+                <input type="text" v-model="keyword" @keyup.13="search" placeholder="请输入搜索条件">
+            </div>
+            <table class="tb">
+                <tr>
+                    <th>编号</th>
+                    <th>品牌名称</th>
+                    <th>创立时间</th>
+                    <th>操作</th>
+                </tr>
+                <!-- 动态生成内容tr -->
+                <tr v-if="getList.length==0">
+                    <td colspan="4">没有数据了哦</td>
+                </tr>
+                <tr v-for="item in getList" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime | dateFmt('/')}}</td>
+                    <td>
+                        <a href="javascript:void(0)" @click="deleteBrand(item.id)">删除</a>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- 删除的那个模态窗口 -->
+            <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" v-on:before-leave="beforeLeave"
+                v-on:leave="leave" v-on:after-leave="afterLeave">
+                <div v-if="isShow" class="delconfirm">
+                    <ul>
+                        <li>
+                            确认删除id为 {{delId}} 的品牌吗?
+                        </li>
+                        <li>
+                            <button @click="delData">确认</button>
+                            <button class="cancel" @click="cancel">取消</button>
+                        </li>
+                    </ul>
+                </div>
+            </transition>
+        </div>
+    </template>
+</body>
+<script>
+    //定义和注册组件
+    //关于命名约定 https://cn.vuejs.org/v2/guide/components.html#%E7%BB%84%E4%BB%B6%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A
+    Vue.component('brandManager', {
+        template: "#templateId",
+        data() {
+            return {
+                id: '',
+                name: '',
+                keyword: '',
+                list: [],
+                isShow: false,
+                delId: 0 //即将要删除的id
+            }
+        },
+        computed:{
+            getList(){
+                //根据条件过滤出满足条件的数组
+                const newList = this.list.filter((item)=>{
+                    return item.name.includes(this.keyword)
+                })
+                
+                //把过滤出来的新数组，返回回去
+                return newList
+            }
+        },
+        created() {
+            this.getBrandList()
+        },
+        filters: {
+            /**
+                时间格式化的过滤器函数
+                其中，第一个参数，是固定的，也是必须的，代表要过滤的原始数据
+            */
+            dateFmt(input, operator) {
+                const date = new Date(input)
+
+                const year = date.getFullYear()
+
+                const month = date.getMonth() + 1
+
+                const day = date.getDate()
+
+                return year + operator + month + operator + day
+            }
+        },
+        methods: {
+            //获取品牌列表数据
+            getBrandList() {
+                //发送请求，获取品牌列表数据
+                const url = `http://157.122.54.189:9093/api/getprodlist`
+                axios.get(url).then(response => {
+                    this.list = response.data.message
+                }, err => {
+                    console.log(err)
+                })
+            },
+            //增加
+            add() {
+                const url = `http://157.122.54.189:9093/api/addproduct`
+
+                axios.post(url, { name: this.name }).then(response => {
+                    //重新查询
+                    this.getBrandList()
+
+                    //清空name
+                    this.name = ''
+                }).catch(err => {
+                    console.log(err)
+                })
+            },
+            //根据id删除
+            deleteBrand(id) {
+                this.delId = id
+                
+                //显示模态框
+                this.isShow = true
+            },
+            //删除相关
+            //确认删除
+            delData() {
+                const url = `http://157.122.54.189:9093/api/delproduct/${this.delId}`
+
+                axios.get(url).then(response=>{
+                    //隐藏模态窗
+                    this.isShow = false
+
+                    //重新查询
+                    this.getBrandList()
+                },err=>{
+                    console.log(err)
+                })
+            },
+            //取消
+            cancel() {
+                //隐藏模态窗
+                this.isShow = false
+            },
+
+            //根据关键字搜索
+            search() {
+
+            },
+
+            //动画相关
+            // --------
+            // 进入中
+            // --------
+
+            beforeEnter: function (el) {
+                // ...
+                el.style.top = '0%'
+            },
+            // 此回调函数是可选项的设置
+            // 与 CSS 结合时使用
+            enter: function (el, done) {
+                // el.style.transition = 'all 0.5s' 这个地方可以写在我们的class类名
+                //刷新动画帧
+                el.offsetHeight
+
+                el.style.top = '30%'
+                // ...
+                done()
+            },
+            afterEnter: function (el) {
+                // ...
+            },
+
+            // --------
+            // 离开时
+            // --------
+
+            beforeLeave: function (el) {
+                // ...
+                el.style.top = '30%'
+            },
+            // 此回调函数是可选项的设置
+            // 与 CSS 结合时使用
+            leave: function (el, done) {
+                //刷新动画帧
+                el.offsetHeight
+
+                el.style.top = '70%'
+                // ...
+                setTimeout(() => {
+                    done()
+                }, 500);
+            },
+            afterLeave: function (el) {
+                // ...
+            }
+        }
+    })
+
+    const vm = new Vue({
+        el: "#app"
+    })
+</script>
+
+</html>

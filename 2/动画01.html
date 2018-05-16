@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <button @click="show = !show">
+            Toggle
+        </button>
+        <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" v-on:enter-cancelled="enterCancelled"
+            v-on:before-leave="beforeLeave" v-on:leave="leave" v-on:after-leave="afterLeave" v-on:leave-cancelled="leaveCancelled">
+            <p v-show="show">hello</p>
+        </transition>
+    </div>
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                show: false
+            },
+            methods: {
+               
+                beforeEnter: function (el) {
+                    console.log(el);
+                },
+                // 此回调函数是可选项的设置
+                // 与 CSS 结合时使用
+                enter: function (el, done) {
+                    // console.log(el)
+                    done()
+                },
+                afterEnter: function (el) {
+                    // console.log(el)
+                },
+                enterCancelled: function (el) {
+                    // console.log(el)
+                },
+                beforeLeave: function (el) {
+                    // console.log(el)
+                },
+                leave: function (el, done) {
+                    // console.log(el)
+                    done()
+                },
+                afterLeave: function (el) {
+                    // console.log(el)
+                },
+                // leaveCancelled 只用于 v-show 中
+                leaveCancelled: function (el) {
+                    // console.log(el)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

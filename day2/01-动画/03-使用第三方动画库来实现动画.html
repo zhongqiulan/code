@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+    <link href="https://cdn.bootcss.com/animate.css/3.5.2/animate.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <button @click="isShow = !isShow">显示/隐藏</button>
+
+        <transition
+            enter-active-class="animated fadeInRight"
+            leave-active-class="animated fadeOutRight">
+            <span style="display:block;width:300px;" v-show="isShow">我是小可爱</span>
+        </transition>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el:"#app",
+        data:{
+            isShow:false
+        }
+    })
+</script>
+</html>

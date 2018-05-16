@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+    <style>
+        .smallcute-enter,.smallcute-leave-to{
+            padding-left: 150px;
+            opacity: 0;
+        }
+        
+        .smallcute-enter-to,.smallcute-leave{
+            padding-left: 0px;
+            opacity: 1;
+        }
+
+        .smallcute-enter-active,.smallcute-leave-active{
+            transition: all 1s;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button @click="isShow = !isShow">显示/隐藏</button>
+        <!-- 1.0 被动画的元素，必须被transition包裹起来 -->
+        <!-- 如果写了name，就相当于自定义了过渡的类名，在写样式的时候，必须匹配上 -->
+        <transition name="smallcute">
+            <!-- 被动画的元素，必须在v-if、v-show的时候，才有动画效果 -->
+            <p v-show="isShow">小可爱</p>
+        </transition>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el:"#app",
+        data:{
+            isShow:false
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <button @click="isShow = !isShow">显示/隐藏</button>
+
+        <transition v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" v-on:before-leave="beforeLeave"
+            v-on:leave="leave" v-on:after-leave="afterLeave">
+            <p v-show="isShow">我是小可爱</p>
+        </transition>
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el: "#app",
+        data: {
+            isShow: false
+        },
+        methods: {
+            //进入之前,el就是代表被动画的元素，我们这个里面，就是p标签那个小可爱
+            beforeEnter(el) {
+                // console.log(el)
+                el.style.paddingLeft = "150px"
+            },
+            enter(el, done) {
+                //1.设置过渡时间
+                el.style.transition = "all 2s"
+
+                //2.设置刷新动画帧
+                el.offsetWidth
+
+                //3.设置结束位置
+                el.style.paddingLeft = "0"
+                console.log("--------------------------")
+                // done()
+            },
+            afterEnter(el) {
+                //this.isShow = false
+            },
+
+            // --------
+            // 离开时
+            // --------
+
+            beforeLeave: function (el) {
+                // ...
+                el.style.paddingLeft = "0"
+            },
+            // 此回调函数是可选项的设置
+            // 与 CSS 结合时使用
+            leave: function (el, done) {
+                //1.设置过渡时间
+                el.style.transition = "all 2s"
+
+                //2.设置刷新动画帧
+                el.offsetWidth
+
+                //3.设置结束位置
+                el.style.paddingLeft = "150px"
+
+                setTimeout(() => {
+                    done()
+                }, 2000);
+            },
+            afterLeave: function (el) {
+                console.log("11111111111111111111111111111")
+                // ...
+                this.isShow = false
+            },
+        }
+    })
+</script>
+
+</html>

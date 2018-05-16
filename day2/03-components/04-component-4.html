@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+</head>
+<script type="text/html" id="templateId">
+    <div>用户名4:
+        <input v-model="username" type="text" />
+        <br/>密码4:
+        <input v-model="password" type="password" />
+        <br/>
+        <button @click="login">登录4</button>
+    </div>
+</script>
+
+<body>
+    <div id="app">
+        <login></login>
+    </div>
+</body>
+<script>
+    //1.组件定义和注册一步到位
+    Vue.component('login', {
+        template: '#templateId',
+        data() {
+            return {
+                username: '',
+                password: ''
+            }
+        },
+        methods: {
+            login() {
+                console.log(this.username, this.password)
+            }
+        }
+    })
+
+    const vm = new Vue({
+        el: "#app"
+    })
+</script>
+
+</html>

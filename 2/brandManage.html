@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+    <style>
+        #app {
+            width: 600px;
+            margin: 10px auto;
+        }
+
+        .tb {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .tb th {
+            background-color: #0094ff;
+            color: white;
+        }
+
+        .tb td,
+        .tb th {
+            padding: 5px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        .add {
+            padding: 5px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <brand-manager></brand-manager>
+    </div>
+    <!-- 组件的template -->
+    <template id="templateId">
+        <div>
+
+            <div class="add">
+                编号:
+                <input v-model="id" type="text"> 品牌名称:
+                <input v-model="name" @keyup.enter="add" type="text">
+                <input type="button" @click="add" value="添加">
+            </div>
+
+            <div class="add">
+                品牌名称:
+                <input type="text" placeholder="请输入搜索条件">
+            </div>
+            <table class="tb">
+                <tr>
+                    <th>编号</th>
+                    <th>品牌名称</th>
+                    <th>创立时间</th>
+                    <th>操作</th>
+                </tr>
+                <!-- 动态生成内容tr -->
+                <tr v-if="list.length==0">
+                    <td colspan="4">没有数据了哦</td>
+                </tr>
+                <tr v-for="item in list" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime}}</td>
+                    <td>
+                        <a href="#">删除</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </template>
+    <script>
+        //定义和注册组件
+        //关于命名约定 https://cn.vuejs.org/v2/guide/components.html#%E7%BB%84%E4%BB%B6%E5%91%BD%E5%90%8D%E7%BA%A6%E5%AE%9A
+        Vue.component('brandManager', {
+            template: "#templateId",
+            data() {
+                return {
+                    id: '',
+                    name: '',
+                    list: [{
+                            id: 1,
+                            name: '宝马',
+                            ctime: new Date()
+                        },
+                        {
+                            id: 2,
+                            name: '奥迪',
+                            ctime: new Date()
+                        }
+                    ]
+                }
+            },
+            methods: {
+                //增加
+                add() {
+                    this.list.push({
+                        id: this.id,
+                        name: this.name,
+                        ctime: new Date()
+                    })
+
+                    //清空
+                    this.id = ''
+                    this.name = ''
+                },
+                deleteBrand() {
+
+                }
+            }
+        })
+
+        const vm = new Vue({
+            el: "#app"
+        })
+    </script>
+</body>
+
+</html>

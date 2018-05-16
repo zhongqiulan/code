@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        通过watch<br/>
+        <input v-model="firstName" type="text">
+        <input v-model="lastName"  type="text">
+        {{result}}
+    </div>
+</body>
+<script>
+    const vm = new Vue({
+        el:"#app",
+        data:{
+            firstName:'',
+            lastName:'',
+            result:''
+        },
+        watch:{
+            //只要first的值发生变化，就会自动调用后面的回调函数
+            firstName:function(newValue,oldValue){
+                this.result = newValue + " " + this.lastName
+            },
+            "lastName":function(newValue,oldValue){
+                this.result = this.firstName +" "+ newValue
+            }
+        }
+    })
+</script>
+</html>
